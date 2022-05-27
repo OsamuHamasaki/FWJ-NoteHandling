@@ -35,28 +35,28 @@ Class {
 FWJLampControlUI >> blinkSwitchPressed [
 
 	isBlinkSwitchOn := true.
-	'Blink Switch Pressed' crTrace.
+
 ]
 
 { #category : #'event handling - private' }
 FWJLampControlUI >> blinkSwitchReleased [
 
 	isBlinkSwitchOn := false.
-	'Blink Switch Released' crTrace.
+
 ]
 
 { #category : #'event handling - private' }
 FWJLampControlUI >> brightnessSwitchPressed [
 
 	isBrightnessSwitchOn := true.
-	'Brightness Switch pressed' crTrace.
+
 ]
 
 { #category : #'event handling - private' }
 FWJLampControlUI >> brightnessSwitchReleased [
 
 	isBrightnessSwitchOn := false.
-	'Brightness Switch released' crTrace.
+
 ]
 
 { #category : #initialization }
@@ -119,14 +119,14 @@ FWJLampControlUI >> open [
 FWJLampControlUI >> powerSwitchPressed [
 
 	isPowerSwitchOn := true.
-	'Power Switch pressed' crTrace.
+
 ]
 
 { #category : #'event handling - private' }
 FWJLampControlUI >> powerSwitchReleased [
 
 	isPowerSwitchOn := false.
-	'Power Switch released' crTrace.
+
 ]
 
 { #category : #windows }
@@ -134,5 +134,5 @@ FWJLampControlUI >> windowClosed: aWindowPresenter [
 	
 	super windowClosed: aWindowPresenter.
 	socketServer stop.
-	'Window closed' crTrace.
+
 ]

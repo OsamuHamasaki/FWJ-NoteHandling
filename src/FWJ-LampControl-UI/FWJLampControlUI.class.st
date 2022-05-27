@@ -79,7 +79,7 @@ FWJLampControlUI >> initialize [
 		
 	socketServer := SimpleTCPServer new
 		listeningPort: 3000;
-		onDataReceive: [ :socket :receivedData | self onDataReceived: receivedData socket: socket.  ];
+		onDataReceive: [ :socket :receivedData | socket sendData: (self onDataReceived: receivedData) ];
 		yourself
 		
 	
@@ -87,7 +87,7 @@ FWJLampControlUI >> initialize [
 ]
 
 { #category : #'event handling - private' }
-FWJLampControlUI >> onDataReceived: aString socket: socket [
+FWJLampControlUI >> onDataReceived: aString [
 	
 	| outdata indata isLampOn isLampBright |
 	outdata := aString asInteger.
@@ -102,7 +102,7 @@ FWJLampControlUI >> onDataReceived: aString socket: socket [
 	indata := indata | (isPowerSwitchOn ifTrue: [1] ifFalse: [0]).
 	indata := indata | (isBrightnessSwitchOn ifTrue: [ 2 ] ifFalse: [0]).
 	indata := indata | (isBlinkSwitchOn ifTrue: [ 4 ] ifFalse: [0]).
-	socket sendData: indata printString.
+	^indata printString.
 ]
 
 { #category : #initialization }

@@ -108,7 +108,7 @@ FWJLampControlUI >> onDataReceived: aString [
 { #category : #initialization }
 FWJLampControlUI >> open [
 	
-	"self new open"
+	"FWJLampControlUI new open"
 	socketServer start.
 	^presenter
 		open;

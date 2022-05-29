@@ -1,2 +1,2 @@
-# FWJ-NoteHandling
-Smalltalk implementation of note handling exercise
+# FWJ-UI-Pharo
+FWJ-UI implementation by Pharo

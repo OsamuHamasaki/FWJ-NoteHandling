@@ -58,7 +58,8 @@ FWJSensorMorph >> drawOn: aCanvas [
 FWJSensorMorph >> model: aModel aspect: aSymbol [
 	
 	model := aModel.
-	aspect := aSymbol
+	aspect := aSymbol.
+	model addDependent: self.
 ]
 
 { #category : #updating }

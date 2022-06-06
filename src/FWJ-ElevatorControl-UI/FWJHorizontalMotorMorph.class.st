@@ -67,6 +67,7 @@ FWJHorizontalMotorMorph >> drawOn: aCanvas [
 FWJHorizontalMotorMorph >> model: aMotorWithLimit [
 	
 	model := aMotorWithLimit.
+	model addDependent: self.
 ]
 
 { #category : #updating }

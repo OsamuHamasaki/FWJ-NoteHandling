@@ -102,39 +102,27 @@ FWJElevatorControlUI >> initialize [
 ]
 
 { #category : #'event handling - private' }
+FWJElevatorControlUI >> makeIndata [
+
+	| indata |	
+	indata := 0.
+	presenter isLiftOnUpstair ifTrue: [indata + 1].
+	presenter isLiftOnDownstair ifTrue: [indata + 2].
+	presenter isDoorOpened ifTrue: [indata + 4].
+	presenter isDoorClosed ifTrue: [indata + 8].
+	isUpstairCallButtonOn ifTrue: [indata + 16].
+	isDownstairCallButtonOn ifTrue: [indata + 32].
+	isUpstairRequestButtonOn ifTrue: [indata + 64].
+	isDownstairRequestButtonOn ifTrue: [indata + 128].
+
+	^ indata
+]
+
+{ #category : #'event handling - private' }
 FWJElevatorControlUI >> onDataReceived: aString [
 
-	| outdata indata isDoorForwardOn isDoorReverseOn isLiftForwardOn isLiftReverseOn isUpstairCallButtonLampOn isUpstairRequestButtonLampOn isDownstairCallButtonLampOn isDownstairRequestButtonLampOn |
-	outdata := aString asInteger.
-	
-	isLiftForwardOn := (outdata & 1) = 1.
-	isLiftReverseOn := (outdata & 2) = 2.
-	isDoorForwardOn := (outdata & 4) = 4.
-	isDoorReverseOn := (outdata & 8) = 8.
-	isUpstairCallButtonLampOn := (outdata & 16) = 16.
-	isDownstairCallButtonLampOn := (outdata & 32) = 32.
-	isUpstairRequestButtonLampOn := (outdata & 64) = 64.
-	isDownstairRequestButtonLampOn := (outdata & 128) = 128.
-	
-	isLiftForwardOn
-		ifTrue: [ presenter liftGoUp ]
-		ifFalse: [ 
-			isLiftReverseOn
-				ifTrue: [ presenter liftGoDown ]
-				ifFalse: [ presenter liftStop ] ].
-			
-	isDoorForwardOn
-		ifTrue: [ presenter doorOpen ]
-		ifFalse: [ 
-			isDoorReverseOn
-				ifTrue: [ presenter doorClose ]
-				ifFalse: [ presenter doorStop ] ].
-	
-	isUpstairCallButtonLampOn ifTrue: [ presenter upstairCallButtonLampOn ] ifFalse: [ presenter upstairCallButtonLampOff ].
-	isUpstairRequestButtonLampOn ifTrue: [ presenter upstairRequestButtonLampOn ] ifFalse: [ presenter upstairRequestButtonLampOff ].
-	isDownstairCallButtonLampOn ifTrue: [ presenter downstairCallButtonLampOn ] ifFalse: [ presenter downstairCallButtonLampOff ].
-	isDownstairRequestButtonLampOn ifTrue: [ presenter downstairRequestButtonLampOn ] ifFalse: [ presenter downstairRequestButtonLampOff ].
-	
+	| indata |
+	self reflectOutData: (FWJElevatorControlOutData new data: aString asInteger).	
 	presenter tick.
 	
 	indata := 0.
@@ -158,6 +146,48 @@ FWJElevatorControlUI >> open [
 	^presenter
 		open;
 		yourself
+]
+
+{ #category : #private }
+FWJElevatorControlUI >> reflectOutData: outdata [
+
+	self reflectOutDataForLift: outdata.
+	self reflectOutDataForDoor: outdata.
+	self reflectOutDataForButtonLamp: outdata.
+]
+
+{ #category : #private }
+FWJElevatorControlUI >> reflectOutDataForButtonLamp: outdata [
+
+	outdata isUpstairCallButtonLampOn ifTrue: [ presenter upstairCallButtonLampOn ] ifFalse: [ presenter upstairCallButtonLampOff ].
+	outdata isUpstairRequestButtonLampOn ifTrue: [ presenter upstairRequestButtonLampOn ] ifFalse: [ presenter upstairRequestButtonLampOff ].
+	outdata isDownstairCallButtonLampOn ifTrue: [ presenter downstairCallButtonLampOn ] ifFalse: [ presenter downstairCallButtonLampOff ].
+	outdata isDownstairRequestButtonLampOn ifTrue: [ presenter downstairRequestButtonLampOn ] ifFalse: [ presenter downstairRequestButtonLampOff ].
+
+]
+
+{ #category : #private }
+FWJElevatorControlUI >> reflectOutDataForDoor: outdata [
+
+	outdata isDoorForwardOn
+		ifTrue: [ presenter doorOpen ]
+		ifFalse: [ 
+			outdata isDoorReverseOn
+				ifTrue: [ presenter doorClose ]
+				ifFalse: [ presenter doorStop ] ].
+
+]
+
+{ #category : #private }
+FWJElevatorControlUI >> reflectOutDataForLift: outdata [
+
+	outdata isLiftForwardOn
+		ifTrue: [ presenter liftGoUp ]
+		ifFalse: [ 
+			outdata isLiftReverseOn
+				ifTrue: [ presenter liftGoDown ]
+				ifFalse: [ presenter liftStop ] ].
+
 ]
 
 { #category : #'event handling - private' }

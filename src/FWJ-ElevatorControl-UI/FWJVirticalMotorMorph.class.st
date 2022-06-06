@@ -34,16 +34,13 @@ FWJVirticalMotorMorph class >> example [
 { #category : #drawing }
 FWJVirticalMotorMorph >> drawOn: aCanvas [
 	
-	| rate fillColor fillRect |
-	super drawOn: aCanvas.
-	rate := model rate.
+	| fillRect fillColor	|
+	fillColor := model isMoving ifTrue: [Color red] ifFalse: [Color gray].
+	aCanvas fillRectangle: self bounds color: fillColor.
 	
-	fillRect := (self bounds origin x @ (self bounds origin y + (self height * (1 - rate)))) corner: self bounds corner.
+	fillRect := (self bounds origin x @ (self bounds origin y + (self height * (1 - model rate)))) corner: self bounds corner.
 	fillColor := model isMoving ifTrue: [Color green] ifFalse: [Color orange].
 	aCanvas fillRectangle: fillRect color: fillColor.
 
-	fillRect := self bounds origin extent: (self bounds extent x @ (self bounds extent y * (1 - rate))).
-	fillColor := model isMoving ifTrue: [Color red] ifFalse: [Color gray].
-	aCanvas fillRectangle: fillRect color: fillColor.
 
 ]

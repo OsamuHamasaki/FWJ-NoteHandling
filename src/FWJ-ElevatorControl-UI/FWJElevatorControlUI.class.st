@@ -106,14 +106,14 @@ FWJElevatorControlUI >> makeIndata [
 
 	| indata |	
 	indata := 0.
-	presenter isLiftOnUpstair ifTrue: [indata + 1].
-	presenter isLiftOnDownstair ifTrue: [indata + 2].
-	presenter isDoorOpened ifTrue: [indata + 4].
-	presenter isDoorClosed ifTrue: [indata + 8].
-	isUpstairCallButtonOn ifTrue: [indata + 16].
-	isDownstairCallButtonOn ifTrue: [indata + 32].
-	isUpstairRequestButtonOn ifTrue: [indata + 64].
-	isDownstairRequestButtonOn ifTrue: [indata + 128].
+	presenter isLiftOnUpstair ifTrue: [indata := indata + 1].
+	presenter isLiftOnDownstair ifTrue: [indata := indata + 2].
+	presenter isDoorOpened ifTrue: [indata := indata + 4].
+	presenter isDoorClosed ifTrue: [indata := indata + 8].
+	isUpstairCallButtonOn ifTrue: [indata := indata + 16].
+	isDownstairCallButtonOn ifTrue: [indata := indata + 32].
+	isUpstairRequestButtonOn ifTrue: [indata := indata + 64].
+	isDownstairRequestButtonOn ifTrue: [indata := indata + 128].
 
 	^ indata
 ]
@@ -121,21 +121,9 @@ FWJElevatorControlUI >> makeIndata [
 { #category : #'event handling - private' }
 FWJElevatorControlUI >> onDataReceived: aString [
 
-	| indata |
 	self reflectOutData: (FWJElevatorControlOutData new data: aString asInteger).	
-	presenter tick.
-	
-	indata := 0.
-	indata := indata | (presenter isLiftOnUpstair ifTrue: [1] ifFalse: [0]).
-	indata := indata | (presenter isLiftOnDownstair ifTrue: [2] ifFalse: [0]).
-	indata := indata | (presenter isDoorOpened ifTrue: [4] ifFalse: [0]).
-	indata := indata | (presenter isDoorClosed ifTrue: [8] ifFalse: [0]).
-	indata := indata | (isUpstairCallButtonOn ifTrue: [16] ifFalse: [0]).
-	indata := indata | (isDownstairCallButtonOn ifTrue: [32] ifFalse: [0]).
-	indata := indata | (isUpstairRequestButtonOn ifTrue: [64] ifFalse: [0]).
-	indata := indata | (isDownstairRequestButtonOn ifTrue: [128] ifFalse: [0]).
-
-	^ indata printString
+	self tick.
+	^ self makeIndata printString
 ]
 
 { #category : #'open/close' }

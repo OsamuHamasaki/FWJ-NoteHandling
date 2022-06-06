@@ -49,17 +49,14 @@ FWJHorizontalMotorMorph class >> example [
 { #category : #drawing }
 FWJHorizontalMotorMorph >> drawOn: aCanvas [
 	
-	| rate fillColor fillRect |
-	super drawOn: aCanvas.
-	rate := model rate.
+	| fillColor fillRect |
+	fillColor := model isMoving ifTrue: [Color red] ifFalse: [Color gray].
+	aCanvas fillRectangle: self bounds color: fillColor.
 	
-	fillRect := self bounds origin extent: (self bounds extent x * rate) @ (self bounds extent y).
+	fillRect := self bounds origin extent: (self bounds extent x * model rate) @ (self bounds extent y).
 	fillColor := model isMoving ifTrue: [Color green] ifFalse: [Color orange].
 	aCanvas fillRectangle: fillRect color: fillColor.
 
-	fillRect := ((self bounds origin x + (self bounds extent x * rate)) @ self bounds origin y) corner: self bounds corner.
-	fillColor := model isMoving ifTrue: [Color red] ifFalse: [Color gray].
-	aCanvas fillRectangle: fillRect color: fillColor.
 
 ]
 

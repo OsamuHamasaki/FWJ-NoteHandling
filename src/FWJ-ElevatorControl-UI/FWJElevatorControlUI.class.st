@@ -40,6 +40,15 @@ Class {
 	#category : #'FWJ-ElevatorControl-UI'
 }
 
+{ #category : #'instance creation' }
+FWJElevatorControlUI class >> open [
+	"self open"
+	
+	^self new
+		open;
+		yourself
+]
+
 { #category : #'event handling - private' }
 FWJElevatorControlUI >> downstairCallButtonPressed [
 
@@ -141,7 +150,7 @@ FWJElevatorControlUI >> onDataReceived: aString [
 	^ indata printString
 ]
 
-{ #category : #initialization }
+{ #category : #'open/close' }
 FWJElevatorControlUI >> open [
 	"FWJElevatorControlUI new open"	
 			

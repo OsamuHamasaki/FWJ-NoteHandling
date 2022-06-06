@@ -31,6 +31,15 @@ Class {
 	#category : #'FWJ-LampControl-UI'
 }
 
+{ #category : #'instance creation' }
+FWJLampControlUI class >> open [
+	"self open"	
+			
+	^ self new
+		open;
+		yourself
+]
+
 { #category : #'event handling - private' }
 FWJLampControlUI >> blinkSwitchPressed [
 

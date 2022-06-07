@@ -23,10 +23,7 @@ Internal Representation and Key Implementation Points.
 "
 Class {
 	#name : #FWJHorizontalMotorMorph,
-	#superclass : #Morph,
-	#instVars : [
-		'model'
-	],
+	#superclass : #FWJMotorMorph,
 	#category : #'FWJ-ElevatorControl-UI'
 }
 
@@ -47,28 +44,8 @@ FWJHorizontalMotorMorph class >> example [
 ]
 
 { #category : #drawing }
-FWJHorizontalMotorMorph >> drawOn: aCanvas [
+FWJHorizontalMotorMorph >> fillRectForForground: rate [
 	
-	| fillColor fillRect |
-	fillColor := model isMoving ifTrue: [Color red] ifFalse: [Color gray].
-	aCanvas fillRectangle: self bounds color: fillColor.
-	
-	fillRect := self bounds origin extent: (self bounds extent x * model rate) @ (self bounds extent y).
-	fillColor := model isMoving ifTrue: [Color green] ifFalse: [Color orange].
-	aCanvas fillRectangle: fillRect color: fillColor.
+	^self bounds origin extent: (self bounds extent x * rate) @ (self bounds extent y).
 
-
-]
-
-{ #category : #accessing }
-FWJHorizontalMotorMorph >> model: aMotorWithLimit [
-	
-	model := aMotorWithLimit.
-	model addDependent: self.
-]
-
-{ #category : #updating }
-FWJHorizontalMotorMorph >> update: aParameter [
-	
-	self changed.
 ]

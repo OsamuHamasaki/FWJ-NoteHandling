@@ -20,7 +20,7 @@ Internal Representation and Key Implementation Points.
 "
 Class {
 	#name : #FWJVirticalMotorMorph,
-	#superclass : #FWJHorizontalMotorMorph,
+	#superclass : #FWJMotorMorph,
 	#category : #'FWJ-ElevatorControl-UI'
 }
 
@@ -32,15 +32,8 @@ FWJVirticalMotorMorph class >> example [
 ]
 
 { #category : #drawing }
-FWJVirticalMotorMorph >> drawOn: aCanvas [
+FWJVirticalMotorMorph >> fillRectForForground: rate [
 	
-	| fillRect fillColor	|
-	fillColor := model isMoving ifTrue: [Color red] ifFalse: [Color gray].
-	aCanvas fillRectangle: self bounds color: fillColor.
-	
-	fillRect := (self bounds origin x @ (self bounds origin y + (self height * (1 - model rate)))) corner: self bounds corner.
-	fillColor := model isMoving ifTrue: [Color green] ifFalse: [Color orange].
-	aCanvas fillRectangle: fillRect color: fillColor.
-
+	^(self bounds origin x @ (self bounds origin y + (self height * (1 - rate)))) corner: self bounds corner.
 
 ]

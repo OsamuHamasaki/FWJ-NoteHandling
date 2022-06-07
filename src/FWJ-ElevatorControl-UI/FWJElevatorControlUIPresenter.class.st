@@ -97,10 +97,42 @@ FWJElevatorControlUIPresenter >> doorClose [
 	door goBackward
 ]
 
+{ #category : #accessing }
+FWJElevatorControlUIPresenter >> doorClosedAction: aBlock [
+
+	door backwardLimitOnAction: aBlock
+
+	
+]
+
+{ #category : #accessing }
+FWJElevatorControlUIPresenter >> doorNotClosedAction: aBlock [
+
+	door backwardLimitOffAction: aBlock
+
+	
+]
+
+{ #category : #accessing }
+FWJElevatorControlUIPresenter >> doorNotOpenedAction: aBlock [
+
+	door forwardLimitOffAction: aBlock
+
+	
+]
+
 { #category : #'changing state' }
 FWJElevatorControlUIPresenter >> doorOpen [
 	
 	door goForward
+]
+
+{ #category : #accessing }
+FWJElevatorControlUIPresenter >> doorOpenedAction: aBlock [
+
+	door forwardLimitOnAction: aBlock
+
+	
 ]
 
 { #category : #'changing state' }
@@ -247,30 +279,6 @@ FWJElevatorControlUIPresenter >> initializeWindow: aWindowPresenter [
 	aWindowPresenter title: 'FWJ Elevator Control'.
 ]
 
-{ #category : #testing }
-FWJElevatorControlUIPresenter >> isDoorClosed [
-	
-	^door isOnBackwardLimit 
-]
-
-{ #category : #testing }
-FWJElevatorControlUIPresenter >> isDoorOpened [
-	
-	^door isOnForwardLimit 
-]
-
-{ #category : #testing }
-FWJElevatorControlUIPresenter >> isLiftOnDownstair [
-	
-	^lift isOnBackwardLimit 
-]
-
-{ #category : #testing }
-FWJElevatorControlUIPresenter >> isLiftOnUpstair [
-	
-	^lift isOnForwardLimit 
-]
-
 { #category : #'changing state' }
 FWJElevatorControlUIPresenter >> liftGoDown [
 	
@@ -281,6 +289,38 @@ FWJElevatorControlUIPresenter >> liftGoDown [
 FWJElevatorControlUIPresenter >> liftGoUp [
 	
 	lift goForward
+]
+
+{ #category : #accessing }
+FWJElevatorControlUIPresenter >> liftNotOnDownstairAction: aBlock [
+
+	lift backwardLimitOffAction: aBlock
+
+	
+]
+
+{ #category : #accessing }
+FWJElevatorControlUIPresenter >> liftNotOnUpstairOAction: aBlock [
+
+	lift forwardLimitOffAction: aBlock
+
+	
+]
+
+{ #category : #accessing }
+FWJElevatorControlUIPresenter >> liftOnDownstairAction: aBlock [
+
+	lift backwardLimitOnAction: aBlock
+
+	
+]
+
+{ #category : #accessing }
+FWJElevatorControlUIPresenter >> liftOnUpstairAction: aBlock [
+
+	lift forwardLimitOnAction: aBlock
+
+	
 ]
 
 { #category : #'changing state' }

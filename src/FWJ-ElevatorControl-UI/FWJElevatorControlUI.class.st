@@ -35,7 +35,11 @@ Class {
 		'isUpstairCallButtonOn',
 		'isUpstairRequestButtonOn',
 		'isDownstairCallButtonOn',
-		'isDownstairRequestButtonOn'
+		'isDownstairRequestButtonOn',
+		'isDoorOpen',
+		'isDoorClose',
+		'isLiftOnUpstair',
+		'isLiftOnDownstair'
 	],
 	#category : #'FWJ-ElevatorControl-UI'
 }
@@ -47,6 +51,30 @@ FWJElevatorControlUI class >> open [
 	^self new
 		open;
 		yourself
+]
+
+{ #category : #'event handling - private' }
+FWJElevatorControlUI >> doorClosed [
+
+	isDoorClose := true.
+]
+
+{ #category : #'event handling - private' }
+FWJElevatorControlUI >> doorNotClosed [
+
+	isDoorClose := false.
+]
+
+{ #category : #'event handling - private' }
+FWJElevatorControlUI >> doorNotOpened [
+
+	isDoorOpen := false.
+]
+
+{ #category : #'event handling - private' }
+FWJElevatorControlUI >> doorOpened [
+
+	isDoorOpen := true.
 ]
 
 { #category : #'event handling - private' }
@@ -77,11 +105,15 @@ FWJElevatorControlUI >> downstairRequestButtonReleased [
 FWJElevatorControlUI >> initialize [
 
 	super initialize.
-	isUpstairCallButtonOn := false.
-	isUpstairRequestButtonOn := false.
-	isDownstairCallButtonOn := false.
-	isDownstairRequestButtonOn := false.
-	
+	self initializeVariables.
+	self initializePresenter.
+	self initializeSocketServer.
+
+]
+
+{ #category : #'private - initialization' }
+FWJElevatorControlUI >> initializePresenter [
+
 	presenter := FWJElevatorControlUIPresenter newApplication: self.
 	presenter
 		upstairCallButtonOnAction: [ self upstairCallButtonPressed ];
@@ -91,8 +123,21 @@ FWJElevatorControlUI >> initialize [
 		downstairCallButtonOnAction: [ self downstairCallButtonPressed ];
 		downstairCallButtonOffAction: [ self downstairCallButtonReleased ];
 		downstairRequestButtonOnAction: [ self downstairRequestButtonPressed ];
-		downstairRequestButtonOffAction: [ self downstairRequestButtonReleased ].
-		
+		downstairRequestButtonOffAction: [ self downstairRequestButtonReleased ];
+		doorOpenedAction: [ self doorOpened ];
+		doorNotOpenedAction: [ self doorNotOpened ];
+		doorClosedAction: [ self doorClosed ];
+		doorNotClosedAction: [ self doorNotClosed ];
+		liftOnUpstairAction: [ self liftOnUpstair ];
+		liftNotOnUpstairOAction: [ self liftNotOnUpstair ];
+		liftOnDownstairAction: [ self liftOnDownstair ];
+		liftNotOnDownstairAction: [ self liftNotOnDownstair ].
+
+]
+
+{ #category : #'private - initialization' }
+FWJElevatorControlUI >> initializeSocketServer [
+
 	socketServer := SimpleTCPServer new
 		listeningPort: 3000;
 		onDataReceive: [ :socket :receivedData | socket sendData: (self onDataReceived: receivedData) ];
@@ -101,15 +146,53 @@ FWJElevatorControlUI >> initialize [
 
 ]
 
+{ #category : #'private - initialization' }
+FWJElevatorControlUI >> initializeVariables [
+
+	isUpstairCallButtonOn := false.
+	isUpstairRequestButtonOn := false.
+	isDownstairCallButtonOn := false.
+	isDownstairRequestButtonOn := false.
+	isDoorOpen := false.
+	isDoorClose := true.
+	isLiftOnUpstair := false.
+	isLiftOnDownstair := true.
+
+]
+
 { #category : #'event handling - private' }
+FWJElevatorControlUI >> liftNotOnDownstair [
+
+	isLiftOnDownstair := false.
+]
+
+{ #category : #'event handling - private' }
+FWJElevatorControlUI >> liftNotOnUpstair [
+
+	isLiftOnUpstair := false.
+]
+
+{ #category : #'event handling - private' }
+FWJElevatorControlUI >> liftOnDownstair [
+
+	isLiftOnDownstair := true.
+]
+
+{ #category : #'event handling - private' }
+FWJElevatorControlUI >> liftOnUpstair [
+
+	isLiftOnUpstair := true.
+]
+
+{ #category : #private }
 FWJElevatorControlUI >> makeIndata [
 
 	| indata |	
 	indata := 0.
-	presenter isLiftOnUpstair ifTrue: [indata := indata + 1].
-	presenter isLiftOnDownstair ifTrue: [indata := indata + 2].
-	presenter isDoorOpened ifTrue: [indata := indata + 4].
-	presenter isDoorClosed ifTrue: [indata := indata + 8].
+	isLiftOnUpstair ifTrue: [indata := indata + 1].
+	isLiftOnDownstair ifTrue: [indata := indata + 2].
+	isDoorOpen ifTrue: [indata := indata + 4].
+	isDoorClose ifTrue: [indata := indata + 8].
 	isUpstairCallButtonOn ifTrue: [indata := indata + 16].
 	isDownstairCallButtonOn ifTrue: [indata := indata + 32].
 	isUpstairRequestButtonOn ifTrue: [indata := indata + 64].

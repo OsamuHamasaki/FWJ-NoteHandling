@@ -24,7 +24,11 @@ Class {
 	#instVars : [
 		'position',
 		'direction',
-		'maxValueOfPosition'
+		'maxValueOfPosition',
+		'forwardLimitOnAction',
+		'forwardLimitOffAction',
+		'backwardLimitOnAction',
+		'backwardLimitOffAction'
 	],
 	#category : #'FWJ-ElevatorControl-UI'
 }
@@ -33,17 +37,45 @@ Class {
 FWJMotorWithLimit >> backward [
 
 	position == 0 ifTrue: [ ^self ].
+	position == maxValueOfPosition ifTrue: [ forwardLimitOffAction value ].
 	position := position - 1.
+	position == 0 ifTrue: [ backwardLimitOnAction value ].
 	self changed.
+]
+
+{ #category : #accessing }
+FWJMotorWithLimit >> backwardLimitOffAction: aBlock [
+	
+	backwardLimitOffAction := aBlock
+]
+
+{ #category : #accessing }
+FWJMotorWithLimit >> backwardLimitOnAction: aBlock [
+	
+	backwardLimitOnAction := aBlock
 ]
 
 { #category : #private }
 FWJMotorWithLimit >> forward [
 
-	position == maxValueOfPosition  ifTrue: [ ^self ].
+	position == maxValueOfPosition ifTrue: [ ^self ].
+	position == 0 ifTrue: [ backwardLimitOffAction value ].
 	position := position + 1.
+	position == maxValueOfPosition ifTrue: [ forwardLimitOnAction value ].
 	self changed
 
+]
+
+{ #category : #accessing }
+FWJMotorWithLimit >> forwardLimitOffAction: aBlock [
+	
+	forwardLimitOffAction := aBlock
+]
+
+{ #category : #accessing }
+FWJMotorWithLimit >> forwardLimitOnAction: aBlock [
+	
+	forwardLimitOnAction := aBlock
 ]
 
 { #category : #'changing state' }
@@ -67,6 +99,10 @@ FWJMotorWithLimit >> initialize [
 	position := 0.
 	direction := #noMove.
 	maxValueOfPosition := 100.
+	forwardLimitOnAction := [  ].
+	forwardLimitOffAction := [  ].
+	backwardLimitOnAction := [  ].
+	backwardLimitOffAction := [  ].
 ]
 
 { #category : #testing }
